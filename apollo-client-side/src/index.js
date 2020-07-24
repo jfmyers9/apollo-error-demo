@@ -32,31 +32,21 @@ const client = new ApolloClient({
 });
 
 function DataComponent() {
-  const result = useQuery(QUERY,
+  const { loading, error, data, refetch } = useQuery(QUERY,
   {
-    // Treats GraphQL errors as network errors. result.error.graphQLErrors will be populated. result.data will be undefined.
-    errorPolicy: "none"
-    // Completely ignores GraphQL errors. result.error will be undefined. result.data will be partially populated.
-    // errorPolicy: "ignore"
-    // Same as "none" except result.data will be partially populated. result.error.graphQLErrors will be populated.
-    // errorPolicy: "all"
+    errorPolicy: "none",
   });
 
-  console.log("result", result)
+  console.log("result", data)
 
-  if (result.loading) return <p>Loading...</p>;
-  if (result.error) {
-    console.log("graphQLErrors", result.error.graphQLErrors)
-    console.log("networkError", result.error.networkError)
-    return <div>
-      <p>Result: ERROR</p>
-      <p>graphQLErrors: {result.error.graphQLErrors ? "true" : "false"}</p>
-      <p>networkError: {result.error.networkError ? "true" : "false"}</p>
-      <p>See console for more info.</p>
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <div>
+      data
+      <button onClick={() => refetch()}>Refetch!</button>
     </div>
-  }
-
-  return <p>Result: SUCCESS</p>;
+  )
 }
 
 const App = () => (
